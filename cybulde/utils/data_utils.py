@@ -32,3 +32,28 @@ def initialize_dvc_storage(dvc_remote_name: str, dvc_remote_url: str) -> None:
         run_shell_command(f"git commit -nm 'Configured remote storage at: {dvc_remote_url}'") # commit changes
     else:
         DATA_UTILS_LOGGER.info("DVC storage was already initialized...")
+
+
+def commit_to_dvc(dvc_raw_data_folder: str, dvc_remote_name: str) -> None:
+    current_version = ""
+    if not current_version:
+        current_version = "0"
+    next_version = f"v{int(current_version)+1}"
+    run_shell_command(f"dvc add {dvc_raw_data_folder}")
+    run_shell_command("git add .")
+    run_shell_command(f"git commit -nm 'Updated version of the data from v{current_version} to {next_version}'")
+    run_shell_command(f"git tag -a {next_version} -m 'Data version {next_version}'") # tagging the version on github repository
+    run_shell_command(f"dvc push {dvc_raw_data_folder}.dvc --remote {dvc_remote_name}") # push the data to the reomte storage
+    run_shell_command("git push --follow-tags") # push the changes wit the tags
+    run_shell_command("git push -f --tags")
+
+
+def make_new_data_version(dvc_raw_data_folder: str, dvc_remote_name: str) -> None:
+    try:
+        status = run_shell_command(f"dvc status {dvc_raw_data_folder}.dvc") # check if the data status change or not
+        if status == "Data and pipelines are up to date.\n": # we but the status under try statment cuz this command return error is the datafolder.dvc dose not exist cuz the data not version yet
+            DATA_UTILS_LOGGER.info("Data and pipelines are up to date.")
+            return
+        commit_to_dvc(dvc_raw_data_folder, dvc_remote_name)
+    except CalledProcessError:
+        commit_to_dvc(dvc_raw_data_folder, dvc_remote_name)

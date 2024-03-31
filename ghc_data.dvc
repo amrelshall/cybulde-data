@@ -1,0 +1,5 @@
+outs:
+- md5: ad8537bec58fc565e768d9f937d1bfcd.dir
+  size: 17809407
+  nfiles: 4
+  path: ghc_data
