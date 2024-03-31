@@ -4,7 +4,9 @@ from pydantic.dataclasses import dataclass
 
 @dataclass
 class Config:
-    helle: str = "world"
+    dvc_remote_name: str = "gdrive"
+    dvc_remote_url: str = "gdrive://1dVLZt8La8m7HKLRRm8OFd9jGnWct3xMl/data/raw"
+    dvc_raw_data_folder: str = "data/raw"
 
 
 def setup_config() -> None:
