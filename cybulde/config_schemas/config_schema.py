@@ -6,7 +6,7 @@ from pydantic.dataclasses import dataclass
 class Config:
     dvc_remote_name: str = "gdrive"
     dvc_remote_url: str = "gdrive://1dVLZt8La8m7HKLRRm8OFd9jGnWct3xMl"
-    dvc_raw_data_folder: str = "./ghc_data"
+    dvc_raw_data_folder: str = "./data/raw"
 
 
 def setup_config() -> None:
