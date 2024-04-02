@@ -45,12 +45,8 @@ def commit_to_dvc(dvc_raw_data_folder: str, dvc_remote_name: str) -> None:
     run_shell_command(f"dvc add {dvc_raw_data_folder}")
     run_shell_command("git add .")
     run_shell_command(f"git commit -nm 'Updated version of the data from v{current_version} to {next_version}'")
-    run_shell_command(
-        f"git tag -a {next_version} -m 'Data version {next_version}'"
-    )  # tagging the version on github repository
-    run_shell_command(
-        f"dvc push {dvc_raw_data_folder}.dvc --remote {dvc_remote_name}"
-    )  # push the data to the reomte storage
+    run_shell_command(f"git tag -a {next_version} -m 'Data version {next_version}'")  # tagging the version on github repository
+    run_shell_command(f"dvc push {dvc_raw_data_folder}.dvc --remote {dvc_remote_name}")  # push the data to the reomte storage
     run_shell_command("git push --follow-tags")  # push the changes wit the tags
     run_shell_command("git push -f --tags")
 
